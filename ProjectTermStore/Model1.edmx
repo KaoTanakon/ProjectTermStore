@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="APD65_63011212031Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CustomerComStore">
+          <Key>
+            <PropertyRef Name="cId" />
+          </Key>
+          <Property Name="cId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="phone" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EmployeesComStore">
+          <Key>
+            <PropertyRef Name="eId" />
+          </Key>
+          <Property Name="eId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="phone" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="role" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IncomeComStore">
+          <Key>
+            <PropertyRef Name="iId" />
+          </Key>
+          <Property Name="iId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date" Type="datetime" Nullable="false" />
+          <Property Name="list" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="income" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="oId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderComStore">
+          <Key>
+            <PropertyRef Name="oId" />
+          </Key>
+          <Property Name="oId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date" Type="datetime" Nullable="false" />
+          <Property Name="total" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="cId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderDetailComStore">
+          <Key>
+            <PropertyRef Name="odId" />
+          </Key>
+          <Property Name="odId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pId" Type="int" Nullable="false" />
+          <Property Name="amount" Type="int" Nullable="false" />
+          <Property Name="oId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductStockComStore">
+          <Key>
+            <PropertyRef Name="pId" />
+          </Key>
+          <Property Name="pId" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="price" Type="int" Nullable="false" />
+          <Property Name="image" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="promotionId" Type="int" />
+          <Property Name="amount" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PromotionComStore">
+          <Key>
+            <PropertyRef Name="promotionId" />
+          </Key>
+          <Property Name="promotionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="sellprice" Type="int" Nullable="false" />
+          <Property Name="sellpercent" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_IncomeComStore_OrderComStore">
+          <End Role="OrderComStore" Type="Self.OrderComStore" Multiplicity="1" />
+          <End Role="IncomeComStore" Type="Self.IncomeComStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderComStore">
+              <PropertyRef Name="oId" />
+            </Principal>
+            <Dependent Role="IncomeComStore">
+              <PropertyRef Name="oId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderComStore_CustomerComStore">
+          <End Role="CustomerComStore" Type="Self.CustomerComStore" Multiplicity="1" />
+          <End Role="OrderComStore" Type="Self.OrderComStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerComStore">
+              <PropertyRef Name="cId" />
+            </Principal>
+            <Dependent Role="OrderComStore">
+              <PropertyRef Name="cId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetailComStore_OrderComStore">
+          <End Role="OrderComStore" Type="Self.OrderComStore" Multiplicity="1" />
+          <End Role="OrderDetailComStore" Type="Self.OrderDetailComStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderComStore">
+              <PropertyRef Name="oId" />
+            </Principal>
+            <Dependent Role="OrderDetailComStore">
+              <PropertyRef Name="oId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetailComStore_ProductStockComStore">
+          <End Role="ProductStockComStore" Type="Self.ProductStockComStore" Multiplicity="1" />
+          <End Role="OrderDetailComStore" Type="Self.OrderDetailComStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductStockComStore">
+              <PropertyRef Name="pId" />
+            </Principal>
+            <Dependent Role="OrderDetailComStore">
+              <PropertyRef Name="pId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductStockComStore_PromotionComStore">
+          <End Role="PromotionComStore" Type="Self.PromotionComStore" Multiplicity="0..1" />
+          <End Role="ProductStockComStore" Type="Self.ProductStockComStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PromotionComStore">
+              <PropertyRef Name="promotionId" />
+            </Principal>
+            <Dependent Role="ProductStockComStore">
+              <PropertyRef Name="promotionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="APD65_63011212031ModelStoreContainer">
+          <EntitySet Name="CustomerComStore" EntityType="Self.CustomerComStore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeesComStore" EntityType="Self.EmployeesComStore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IncomeComStore" EntityType="Self.IncomeComStore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderComStore" EntityType="Self.OrderComStore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetailComStore" EntityType="Self.OrderDetailComStore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductStockComStore" EntityType="Self.ProductStockComStore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PromotionComStore" EntityType="Self.PromotionComStore" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_IncomeComStore_OrderComStore" Association="Self.FK_IncomeComStore_OrderComStore">
+            <End Role="OrderComStore" EntitySet="OrderComStore" />
+            <End Role="IncomeComStore" EntitySet="IncomeComStore" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderComStore_CustomerComStore" Association="Self.FK_OrderComStore_CustomerComStore">
+            <End Role="CustomerComStore" EntitySet="CustomerComStore" />
+            <End Role="OrderComStore" EntitySet="OrderComStore" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetailComStore_OrderComStore" Association="Self.FK_OrderDetailComStore_OrderComStore">
+            <End Role="OrderComStore" EntitySet="OrderComStore" />
+            <End Role="OrderDetailComStore" EntitySet="OrderDetailComStore" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetailComStore_ProductStockComStore" Association="Self.FK_OrderDetailComStore_ProductStockComStore">
+            <End Role="ProductStockComStore" EntitySet="ProductStockComStore" />
+            <End Role="OrderDetailComStore" EntitySet="OrderDetailComStore" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductStockComStore_PromotionComStore" Association="Self.FK_ProductStockComStore_PromotionComStore">
+            <End Role="PromotionComStore" EntitySet="PromotionComStore" />
+            <End Role="ProductStockComStore" EntitySet="ProductStockComStore" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="APD65_63011212031Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CustomerComStore">
+          <Key>
+            <PropertyRef Name="cId" />
+          </Key>
+          <Property Name="cId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="OrderComStores" Relationship="Self.FK_OrderComStore_CustomerComStore" FromRole="CustomerComStore" ToRole="OrderComStore" />
+        </EntityType>
+        <EntityType Name="EmployeesComStore">
+          <Key>
+            <PropertyRef Name="eId" />
+          </Key>
+          <Property Name="eId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="role" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IncomeComStore">
+          <Key>
+            <PropertyRef Name="iId" />
+          </Key>
+          <Property Name="iId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="list" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="income" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="oId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderComStore" Relationship="Self.FK_IncomeComStore_OrderComStore" FromRole="IncomeComStore" ToRole="OrderComStore" />
+        </EntityType>
+        <EntityType Name="OrderComStore">
+          <Key>
+            <PropertyRef Name="oId" />
+          </Key>
+          <Property Name="oId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="total" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="cId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CustomerComStore" Relationship="Self.FK_OrderComStore_CustomerComStore" FromRole="OrderComStore" ToRole="CustomerComStore" />
+          <NavigationProperty Name="IncomeComStores" Relationship="Self.FK_IncomeComStore_OrderComStore" FromRole="OrderComStore" ToRole="IncomeComStore" />
+          <NavigationProperty Name="OrderDetailComStores" Relationship="Self.FK_OrderDetailComStore_OrderComStore" FromRole="OrderComStore" ToRole="OrderDetailComStore" />
+        </EntityType>
+        <EntityType Name="OrderDetailComStore">
+          <Key>
+            <PropertyRef Name="odId" />
+          </Key>
+          <Property Name="odId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="pId" Type="Int32" Nullable="false" />
+          <Property Name="amount" Type="Int32" Nullable="false" />
+          <Property Name="oId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderComStore" Relationship="Self.FK_OrderDetailComStore_OrderComStore" FromRole="OrderDetailComStore" ToRole="OrderComStore" />
+          <NavigationProperty Name="ProductStockComStore" Relationship="Self.FK_OrderDetailComStore_ProductStockComStore" FromRole="OrderDetailComStore" ToRole="ProductStockComStore" />
+        </EntityType>
+        <EntityType Name="ProductStockComStore">
+          <Key>
+            <PropertyRef Name="pId" />
+          </Key>
+          <Property Name="pId" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="price" Type="Int32" Nullable="false" />
+          <Property Name="image" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="promotionId" Type="Int32" />
+          <Property Name="amount" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderDetailComStores" Relationship="Self.FK_OrderDetailComStore_ProductStockComStore" FromRole="ProductStockComStore" ToRole="OrderDetailComStore" />
+          <NavigationProperty Name="PromotionComStore" Relationship="Self.FK_ProductStockComStore_PromotionComStore" FromRole="ProductStockComStore" ToRole="PromotionComStore" />
+        </EntityType>
+        <EntityType Name="PromotionComStore">
+          <Key>
+            <PropertyRef Name="promotionId" />
+          </Key>
+          <Property Name="promotionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="sellprice" Type="Int32" Nullable="false" />
+          <Property Name="sellpercent" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ProductStockComStores" Relationship="Self.FK_ProductStockComStore_PromotionComStore" FromRole="PromotionComStore" ToRole="ProductStockComStore" />
+        </EntityType>
+        <Association Name="FK_OrderComStore_CustomerComStore">
+          <End Role="CustomerComStore" Type="Self.CustomerComStore" Multiplicity="1" />
+          <End Role="OrderComStore" Type="Self.OrderComStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerComStore">
+              <PropertyRef Name="cId" />
+            </Principal>
+            <Dependent Role="OrderComStore">
+              <PropertyRef Name="cId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IncomeComStore_OrderComStore">
+          <End Role="OrderComStore" Type="Self.OrderComStore" Multiplicity="1" />
+          <End Role="IncomeComStore" Type="Self.IncomeComStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderComStore">
+              <PropertyRef Name="oId" />
+            </Principal>
+            <Dependent Role="IncomeComStore">
+              <PropertyRef Name="oId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetailComStore_OrderComStore">
+          <End Role="OrderComStore" Type="Self.OrderComStore" Multiplicity="1" />
+          <End Role="OrderDetailComStore" Type="Self.OrderDetailComStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderComStore">
+              <PropertyRef Name="oId" />
+            </Principal>
+            <Dependent Role="OrderDetailComStore">
+              <PropertyRef Name="oId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetailComStore_ProductStockComStore">
+          <End Role="ProductStockComStore" Type="Self.ProductStockComStore" Multiplicity="1" />
+          <End Role="OrderDetailComStore" Type="Self.OrderDetailComStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductStockComStore">
+              <PropertyRef Name="pId" />
+            </Principal>
+            <Dependent Role="OrderDetailComStore">
+              <PropertyRef Name="pId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductStockComStore_PromotionComStore">
+          <End Role="PromotionComStore" Type="Self.PromotionComStore" Multiplicity="0..1" />
+          <End Role="ProductStockComStore" Type="Self.ProductStockComStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PromotionComStore">
+              <PropertyRef Name="promotionId" />
+            </Principal>
+            <Dependent Role="ProductStockComStore">
+              <PropertyRef Name="promotionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="APD65_63011212031Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CustomerComStores" EntityType="Self.CustomerComStore" />
+          <EntitySet Name="EmployeesComStores" EntityType="Self.EmployeesComStore" />
+          <EntitySet Name="IncomeComStores" EntityType="Self.IncomeComStore" />
+          <EntitySet Name="OrderComStores" EntityType="Self.OrderComStore" />
+          <EntitySet Name="OrderDetailComStores" EntityType="Self.OrderDetailComStore" />
+          <EntitySet Name="ProductStockComStores" EntityType="Self.ProductStockComStore" />
+          <EntitySet Name="PromotionComStores" EntityType="Self.PromotionComStore" />
+          <AssociationSet Name="FK_OrderComStore_CustomerComStore" Association="Self.FK_OrderComStore_CustomerComStore">
+            <End Role="CustomerComStore" EntitySet="CustomerComStores" />
+            <End Role="OrderComStore" EntitySet="OrderComStores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IncomeComStore_OrderComStore" Association="Self.FK_IncomeComStore_OrderComStore">
+            <End Role="OrderComStore" EntitySet="OrderComStores" />
+            <End Role="IncomeComStore" EntitySet="IncomeComStores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetailComStore_OrderComStore" Association="Self.FK_OrderDetailComStore_OrderComStore">
+            <End Role="OrderComStore" EntitySet="OrderComStores" />
+            <End Role="OrderDetailComStore" EntitySet="OrderDetailComStores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetailComStore_ProductStockComStore" Association="Self.FK_OrderDetailComStore_ProductStockComStore">
+            <End Role="ProductStockComStore" EntitySet="ProductStockComStores" />
+            <End Role="OrderDetailComStore" EntitySet="OrderDetailComStores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductStockComStore_PromotionComStore" Association="Self.FK_ProductStockComStore_PromotionComStore">
+            <End Role="PromotionComStore" EntitySet="PromotionComStores" />
+            <End Role="ProductStockComStore" EntitySet="ProductStockComStores" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="APD65_63011212031ModelStoreContainer" CdmEntityContainer="APD65_63011212031Entities">
+          <EntitySetMapping Name="CustomerComStores">
+            <EntityTypeMapping TypeName="APD65_63011212031Model.CustomerComStore">
+              <MappingFragment StoreEntitySet="CustomerComStore">
+                <ScalarProperty Name="cId" ColumnName="cId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeesComStores">
+            <EntityTypeMapping TypeName="APD65_63011212031Model.EmployeesComStore">
+              <MappingFragment StoreEntitySet="EmployeesComStore">
+                <ScalarProperty Name="eId" ColumnName="eId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IncomeComStores">
+            <EntityTypeMapping TypeName="APD65_63011212031Model.IncomeComStore">
+              <MappingFragment StoreEntitySet="IncomeComStore">
+                <ScalarProperty Name="iId" ColumnName="iId" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="list" ColumnName="list" />
+                <ScalarProperty Name="income" ColumnName="income" />
+                <ScalarProperty Name="oId" ColumnName="oId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderComStores">
+            <EntityTypeMapping TypeName="APD65_63011212031Model.OrderComStore">
+              <MappingFragment StoreEntitySet="OrderComStore">
+                <ScalarProperty Name="oId" ColumnName="oId" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="cId" ColumnName="cId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetailComStores">
+            <EntityTypeMapping TypeName="APD65_63011212031Model.OrderDetailComStore">
+              <MappingFragment StoreEntitySet="OrderDetailComStore">
+                <ScalarProperty Name="odId" ColumnName="odId" />
+                <ScalarProperty Name="pId" ColumnName="pId" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="oId" ColumnName="oId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductStockComStores">
+            <EntityTypeMapping TypeName="APD65_63011212031Model.ProductStockComStore">
+              <MappingFragment StoreEntitySet="ProductStockComStore">
+                <ScalarProperty Name="pId" ColumnName="pId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="promotionId" ColumnName="promotionId" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PromotionComStores">
+            <EntityTypeMapping TypeName="APD65_63011212031Model.PromotionComStore">
+              <MappingFragment StoreEntitySet="PromotionComStore">
+                <ScalarProperty Name="promotionId" ColumnName="promotionId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="sellprice" ColumnName="sellprice" />
+                <ScalarProperty Name="sellpercent" ColumnName="sellpercent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
